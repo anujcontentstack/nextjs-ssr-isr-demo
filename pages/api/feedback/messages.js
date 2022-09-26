@@ -16,18 +16,18 @@ export default async function handler(req, res) {
   console.log(req.body);
   if (req.method === "POST") {
     console.log("In POSt handler");
-    await saveFeedbackVote(req.body);
+    await saveFeedbackMessage(req.body);
     res.status(201).json(req.body);
   } else if(req.method === "GET") {
     console.log("In GET Handler")
-    const results = await getFeedbackVotes();
+    const results = await getFeedbackMessages();
     res.status(200).json(results)
   } else {
     res.status(200).end();
   }
 }
 
-async function getFeedbackVotes() {
+async function getFeedbackMessages() {
     //   const uri = process.env.MONGODB_URI;
     const uri =
       "mongodb://contentflyuser:mongodbDevPass321@ac-fq7yvo0-shard-00-00.1cerein.mongodb.net:27017,ac-fq7yvo0-shard-00-01.1cerein.mongodb.net:27017,ac-fq7yvo0-shard-00-02.1cerein.mongodb.net:27017/?ssl=true&replicaSet=atlas-1qydc3-shard-0&authSource=admin&retryWrites=true&w=majority";
@@ -45,7 +45,7 @@ async function getFeedbackVotes() {
       await client.connect();
       console.log("Connected");
       const db = client.db(dbName);
-      const collection = db.collection("feedback-votes");
+      const collection = db.collection("feedback-messages");
   
       // Perform CRUD operation ...
       results = await collection.find({}).toArray();
@@ -59,7 +59,7 @@ async function getFeedbackVotes() {
     return results;
   }
 
-async function saveFeedbackVote(data) {
+async function saveFeedbackMessage(data) {
   //   const uri = process.env.MONGODB_URI;
   const uri =
     "mongodb://contentflyuser:mongodbDevPass321@ac-fq7yvo0-shard-00-00.1cerein.mongodb.net:27017,ac-fq7yvo0-shard-00-01.1cerein.mongodb.net:27017,ac-fq7yvo0-shard-00-02.1cerein.mongodb.net:27017/?ssl=true&replicaSet=atlas-1qydc3-shard-0&authSource=admin&retryWrites=true&w=majority";
@@ -78,7 +78,7 @@ async function saveFeedbackVote(data) {
     await client.connect();
     console.log("Connected");
     const db = client.db(dbName);
-    const collection = db.collection("feedback-votes");
+    const collection = db.collection("feedback-messages");
 
     // Perform CRUD operation ...
     const result = await collection.insertOne(data);
