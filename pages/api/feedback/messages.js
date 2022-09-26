@@ -85,8 +85,10 @@ async function saveFeedbackMessage(data) {
     const result = await collection.updateOne(
       { page: data.page },
       {
-        $set: { path: data.path, timestamp: data.timestamp },
-        $push: { messages: data.message },
+        $set: { path: data.path },
+        $push: {
+          messages: { message: data.message, timestamp: data.timestamp },
+        },
       },
       { upsert: true }
     );
