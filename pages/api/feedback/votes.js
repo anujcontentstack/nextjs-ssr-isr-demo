@@ -45,7 +45,7 @@ async function getFeedbackVotes() {
       await client.connect();
       console.log("Connected");
       const db = client.db(dbName);
-      const collection = db.collection("feedback-votes");
+      const collection = db.collection("feedbacks");
   
       // Perform CRUD operation ...
       results = await collection.find({}).toArray();
@@ -78,10 +78,20 @@ async function saveFeedbackVote(data) {
     await client.connect();
     console.log("Connected");
     const db = client.db(dbName);
-    const collection = db.collection("feedback-votes");
+    const collection = db.collection("feedbacks");
+
+    // const data2 = {
+    //   page: "Testaa page",
+    //   path: "/abc/234aa",
+    //   // timestamp: new Date().toISOString(),
+    //   vote: 'downvote',
+    // }
 
     // Perform CRUD operation ...
-    const result = await collection.insertOne(data);
+    // const result = await collection.insertOne(data2);
+    const result = await collection.updateOne({ page: data.page }, {
+      $set: { page: data.page, path: data.path },  $inc: { [data.vote]: 1 }
+    }, {upsert: true} )                                                                                                                                           
     console.log("DB Operation successful");
   } catch (err) {
     console.log("Error during db operation", err);
